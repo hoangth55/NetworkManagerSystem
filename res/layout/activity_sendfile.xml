@@ -4,35 +4,27 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/tvStatus"
+    <ListView
+        android:id="@+id/listView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="hello" />
+        android:layout_height="388dp"
+        android:layout_margin="20dp">
 
-    <TextView
-        android:id="@+id/tvPath"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Path: " />
+    </ListView>
 
     <Button
         android:id="@+id/bBrowse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Browse" >
-    </Button>
+        android:layout_gravity="center"
+        android:text="Browse" />
 
     <Button
         android:id="@+id/bSend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send" />
-
-    <ImageView
-        android:id="@+id/ivPic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-    </ImageView>
+        android:layout_gravity="center"
+        android:text="Testing"
+        android:src="@drawable/btn_test" />
 
 </LinearLayout>
