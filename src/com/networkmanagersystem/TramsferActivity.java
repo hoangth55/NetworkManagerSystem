@@ -14,6 +14,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import com.example.networkmanagersystem.R;
@@ -45,7 +46,11 @@ public class TramsferActivity extends Activity {
 	private Handler handler = new Handler();
 	private static final int SELECT_FILE = 1;
 	static String host = "192.168.9.101";
-	static int port = 27015;
+	static int portSending = 27015;
+	static int portReceiving = 26999;
+	
+	static int portUDPTesting = 2700;
+	static int totalPacketUDP = 1;
 	
 	public ListView msgView;
 	public ArrayAdapter<String> msgList;
@@ -87,9 +92,11 @@ public class TramsferActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				recieveFile();
-				sendFile();
-
+				//Server();
+				//testUDPPacket1();
+				testUDPPacket();
+				//recieveFile();
+				//sendFile();
 			}
 		});
 	}
@@ -116,7 +123,7 @@ public class TramsferActivity extends Activity {
 			@Override
 			public void run() {
 				try {
-					Socket sock = new Socket(host, port);
+					Socket sock = new Socket(host, portSending);
 					displayMsg("Connecting to sending...");
 					
 					long start = System.currentTimeMillis();
@@ -165,11 +172,11 @@ public class TramsferActivity extends Activity {
 			@Override
 			public void run() {
 				int filesize = 6022386; // filesize temporary hardcoded
-				int portSend = 26999;
+				
 				int bytesRead;
 				int current = 0;
 				try {
-					Socket sock = new Socket(host, portSend);
+					Socket sock = new Socket(host, portReceiving);
 					displayMsg("Connecting to receiving...");
 					
 					long start = System.currentTimeMillis();
@@ -227,6 +234,95 @@ public class TramsferActivity extends Activity {
 		}).start();
 	}
 	
+	public void testUDPPacket1(){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				int count = 0;
+				try {			
+					
+					InetAddress serverAddr = InetAddress.getByName(host);
+					
+					DatagramSocket socket = new DatagramSocket(portUDPTesting);
+					displayMsg("Client: Start...");
+					socket.setSoTimeout(2000);
+					socket.setReuseAddress(true);
+					byte[] buf = new byte[17];
+					DatagramPacket packet = new DatagramPacket(buf, buf.length);
+					
+					for (int i = 0; i < 2; i++){
+						
+						count++;
+					}
+					socket.receive(packet);
+					
+					Log.d("", buf.toString());
+					
+					socket.close();
+					
+					Log.d("","Client: Succeed!\n");
+					
+					
+				} catch (Exception e) {				
+					e.printStackTrace();
+					Log.d("","Server: Error!\n");
+				} 
+				displayMsg("Successful! Total packet was received is: " + count + "\n");
+
+			}
+		}).start();
+	}
+	
+	public void testUDPPacket(){
+		new Thread(new ClientReUDP()).start();
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		new Thread(new ClientSeUDP()).start();
+	}
+
+	public void Server() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				int count = 0;
+			
+				try {
+					
+					DatagramSocket servSockUDPTesting = new DatagramSocket();
+					InetAddress servAddr = InetAddress.getByName("192.168.9.101");
+					
+					byte[] buf;
+					buf = ("Default message").getBytes();
+			
+					DatagramPacket packet = new DatagramPacket(buf, buf.length, servAddr, 27005);
+					
+					for (int i = 0; i < totalPacketUDP; i++)
+					{	
+						count++;
+						servSockUDPTesting.send(packet);
+						
+					}
+					servSockUDPTesting.close();
+				} 
+				 catch ( SocketException e) {
+					Log.i("***** UDP server has: ", "Socket Exception");
+				} catch ( UnknownHostException e ) {
+					Log.i("***** UDP server has: ", "UnknownHostException");
+				} catch (IOException e){
+					Log.i("***** UDP server has IOException", "e: " + e);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+					System.out.println("Server: Error!\n");
+				}
+				displayMsg("Sending " + count + " packets to client");
+			}
+		}).start();
+	}
 	
 	public void displayMsg(String msg) {
 		final String mssg = msg;
@@ -244,7 +340,4 @@ public class TramsferActivity extends Activity {
 		});
 
 	}
-	
-	
-
 }
