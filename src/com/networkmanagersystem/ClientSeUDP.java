@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import android.util.Log;
 
 public class ClientSeUDP implements Runnable {
-	private final static String SERVER_ADDRESS = "192.168.9.105";// public ip of my server
+	private final static String SERVER_ADDRESS = "192.168.9.198";// public ip of my server
 																	
 	private final static int SERVER_PORT = 10000;
 

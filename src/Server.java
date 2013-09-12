@@ -48,7 +48,7 @@ public class Server {
 			System.out.println("Sending " + count + " packets to client");
 			*/
 
-			System.out.println("Waiting 1...");
+			System.out.println("Waiting connection TCP...");
 			//----------------sending a file to a socketSend-------------------------------
 			Socket sockSend = servsockSend.accept();
 			System.out.println("Accepted connection : " + sockSend);
@@ -73,7 +73,7 @@ public class Server {
 			float bandwidth2 = contentLength2 / ((end2-start2));
 						
 			System.out.println( "File size was downloaded: " + contentLength2 + "bytes");
-			System.out.println( "[BENCHMARK] Bandwidth downloading is:" + bandwidth2 + "kb/s");
+			//System.out.println( "[BENCHMARK] Bandwidth downloading is:" + bandwidth2 + "kb/s");
 					
 			sockSend.close();		
 			
@@ -110,7 +110,7 @@ public class Server {
 			float bandwidth = contentLength / ((end-start));
 						
 			System.out.println( "File size was uploaded: " + contentLength + "bytes");
-			System.out.println( "[BENCHMARK] Bandwidth uploading is:" + bandwidth + "kb/s");
+			//System.out.println( "[BENCHMARK] Bandwidth uploading is:" + bandwidth + "kb/s");
 			sock.close();
 			bos.close();
 		}	

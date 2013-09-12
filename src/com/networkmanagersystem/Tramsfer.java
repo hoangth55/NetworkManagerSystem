@@ -45,7 +45,7 @@ public class Tramsfer extends Activity {
 
 	private Handler handler = new Handler();
 	private static final int SELECT_FILE = 1;
-	static String host = "192.168.9.105";
+	static String host = "192.168.9.198";
 	static int portSending = 27015;
 	static int portReceiving = 26999;
 
@@ -95,14 +95,6 @@ public class Tramsfer extends Activity {
 			public void onClick(View v) {
 				recieveFile();
 				sendFile();
-			}
-		});
-		
-		Button btnUDP = (Button) findViewById(R.id.bUDP);
-		btnUDP.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
 				testUDPPacket();
 			}
 		});
