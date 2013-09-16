@@ -7,7 +7,7 @@
     <ListView
         android:id="@+id/listView"
         android:layout_width="fill_parent"
-        android:layout_height="550dp"
+        android:layout_height="350dp"
         android:layout_margin="20dp" >
     </ListView>
 
@@ -21,10 +21,19 @@
             android:id="@+id/bSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
             android:src="@drawable/btn_test"
             android:text="Testing bandwidth" />
+
+        <Button
+            android:id="@+id/bTestUDP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/btn_test"
+            android:text="Testing UDP" />
 
     </RelativeLayout>
 

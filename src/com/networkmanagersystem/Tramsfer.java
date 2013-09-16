@@ -45,7 +45,7 @@ public class Tramsfer extends Activity {
 
 	private Handler handler = new Handler();
 	private static final int SELECT_FILE = 1;
-	static String host = "192.168.9.198";
+	static String host = "192.168.9.105";
 	static int portSending = 27015;
 	static int portReceiving = 26999;
 
@@ -55,7 +55,7 @@ public class Tramsfer extends Activity {
 	public ListView msgView;
 	public ArrayAdapter<String> msgList;
 
-	int totalPacket = 0;
+
 
 	private String selectedFilePath;
 
@@ -93,8 +93,16 @@ public class Tramsfer extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				recieveFile();
+				recieveFile();	
 				sendFile();
+			}
+		});
+		
+		Button sendUDP = (Button) findViewById(R.id.bTestUDP);
+		sendUDP.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
 				testUDPPacket();
 			}
 		});
@@ -131,7 +139,7 @@ public class Tramsfer extends Activity {
 					long start = System.currentTimeMillis();
 					// sendfile
 					//File myFile = new File(selectedFilePath);
-					byte[] mybytearray = new byte[3000000];
+					byte[] mybytearray = new byte[5000000];
 					//FileInputStream fis = new FileInputStream(myFile);
 					//BufferedInputStream bis = new BufferedInputStream(fis);
 					//bis.read(mybytearray, 0, mybytearray.length);
@@ -243,15 +251,15 @@ public class Tramsfer extends Activity {
 	public void testUDPPacket() {
 		// new Thread(new ClientReUDP()).start();
 		new Thread(new Runnable() {
-			private final static int LISTENING_PORT = 10001;
-
+			private final static int CLIENT_PORT_ToReceiveUDP = 10001;
+			int totalPacket = 0;
 			public void run() {
 
 				try {
 					// Opening listening socket
 					Log.d("UDP Receiver", "Opening listening socket on port "
-							+ LISTENING_PORT + "...");
-					DatagramSocket socket = new DatagramSocket(LISTENING_PORT);
+							+ CLIENT_PORT_ToReceiveUDP + "...");
+					DatagramSocket socket = new DatagramSocket(CLIENT_PORT_ToReceiveUDP);
 					//socket.setBroadcast(true);
 					socket.setReuseAddress(true);
 					socket.setSoTimeout(1000);
