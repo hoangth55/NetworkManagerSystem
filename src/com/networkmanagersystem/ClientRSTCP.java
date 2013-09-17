@@ -1,51 +1,32 @@
 package com.networkmanagersystem;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import com.example.networkmanagersystem.R;
-import com.example.networkmanagersystem.R.id;
 import com.example.networkmanagersystem.R.layout;
+import com.example.networkmanagersystem.R.menu;
 
+import android.os.Bundle;
+import android.os.Handler;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
-public class Tramsfer extends Activity {
-	/** Called when the activity is first created. */
-
+public class ClientRSTCP extends Activity {
 	private Handler handler = new Handler();
-	private static final int SELECT_FILE = 1;
-	static String host = "192.168.9.105";
+	static String host;
 	static int portSending = 27015;
 	static int portReceiving = 26999;
 
@@ -54,80 +35,39 @@ public class Tramsfer extends Activity {
 
 	public ListView msgView;
 	public ArrayAdapter<String> msgList;
-
-
-
-	private String selectedFilePath;
-
+	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_sendfile);
-
-		msgView = (ListView) findViewById(R.id.listView);
+		setContentView(R.layout.activity_client_rstcp);
+		msgView = (ListView) findViewById(R.id.listViewTCP);
 
 		msgList = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1);
 		msgView.setAdapter(msgList);
-
-		/*((Button) findViewById(R.id.bBrowse))
-				.setOnClickListener(new OnClickListener() {
-					public void onClick(View v) {
-
-						Intent intent = new Intent();
-						intent.setType("data/*");
-						intent.setAction(Intent.ACTION_GET_CONTENT);
-						startActivityForResult(
-								Intent.createChooser(intent, "Select File"),
-								SELECT_FILE);
-
-						msgView.smoothScrollToPosition(msgList.getCount() - 1);
-					}
-				});
-		;*/
-
-		Button send = (Button) findViewById(R.id.bSend);
-		// final TextView status = (TextView) findViewById(R.id.tvStatus);
-
-		send.setOnClickListener(new View.OnClickListener() {
-
+		
+		Button back = (Button) findViewById(R.id.TCPBack);
+		back.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				recieveFile();	
-				sendFile();
+				Intent intent = new Intent(ClientRSTCP.this, MainActivity.class);
+	            startActivity(intent);      
+	            finish();
 			}
 		});
-		
-		Button sendUDP = (Button) findViewById(R.id.bTestUDP);
-		sendUDP.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				testUDPPacket();
-			}
-		});
-		
-	}
-
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == RESULT_OK) {
-			if (requestCode == SELECT_FILE) {
-				Uri selectedFileUri = data.getData();
-				// selectedImagePath = getPath(selectedImageUri);
-				selectedFilePath = selectedFileUri.getPath();
-				if (selectedFilePath.startsWith("/mimetype/")) {
-					String trimmedFilePath = selectedFilePath
-							.substring("/mimetype/".length());
-					selectedFilePath = trimmedFilePath
-							.substring(trimmedFilePath.indexOf("/"));
-				}
-				// TextView path = (TextView) findViewById(R.id.tvPath);
-				// path.setText("File Path : " + selectedFilePath);
-				// img.setImageURI(selectedImageUri);
-			}
+		//get address server from users
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			host = extras.getString("AddressServer");
 		}
+		
+		sendFile();
+		recieveFile();
+		
 	}
 
+	
+	
 	public void sendFile() {
 		new Thread(new Runnable() {
 			@Override
@@ -247,53 +187,7 @@ public class Tramsfer extends Activity {
 			}
 		}).start();
 	}
-
-	public void testUDPPacket() {
-		// new Thread(new ClientReUDP()).start();
-		new Thread(new Runnable() {
-			private final static int CLIENT_PORT_ToReceiveUDP = 10001;
-			int totalPacket = 0;
-			public void run() {
-
-				try {
-					// Opening listening socket
-					Log.d("UDP Receiver", "Opening listening socket on port "
-							+ CLIENT_PORT_ToReceiveUDP + "...");
-					DatagramSocket socket = new DatagramSocket(CLIENT_PORT_ToReceiveUDP);
-					//socket.setBroadcast(true);
-					socket.setReuseAddress(true);
-					socket.setSoTimeout(1000);
-					
-					byte[] buf = new byte[1024];
-					DatagramPacket packet = new DatagramPacket(buf, buf.length);
-					for (int i = 0; i <= 10000; i++) {
-						// Listening on socket
-						// Log.d("UDP Receiver", "Listening...");
-						socket.receive(packet);
-						totalPacket++;	
-					}
-					socket.close();
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-					displayMsg("Total packet was lost is:" + (10000 - totalPacket) + "/10000 packets was sended! ");
-					//displayMsg("-------Finish testing..........");
-					Log.e("UDP", "Receiver error", e);
-				}
-			}
-			
-
-		}).start();
-
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		new Thread(new ClientSeUDP()).start();
-	}
-
+	
 	public void displayMsg(String msg) {
 		final String mssg = msg;
 
@@ -310,4 +204,5 @@ public class Tramsfer extends Activity {
 		});
 
 	}
+
 }

@@ -6,5 +6,12 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_sendfile">SendfileActivity</string>
     <string name="title_activity_receivefile">ReceivefileActivity</string>
-
+    <string name="title_activity_client_re_udp">ClientReUDP</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_client_rstcp">ClientRSTCP</string>
+	<string name="tv_label">Type Your Address Server : </string>
+    <string name="button_label">Show Prompt Dialog</string>
+    
 </resources>
