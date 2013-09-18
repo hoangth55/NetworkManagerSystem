@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.content.DialogInterface;
@@ -25,7 +26,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		
-		Button send = (Button) findViewById(R.id.bSend);
+		ImageButton send = (ImageButton) findViewById(R.id.bTestTCP);
 		send.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -38,7 +39,7 @@ public class MainActivity extends Activity {
 
 				alertDialogBuilder.setView(promptView);
 
-				final EditText input = (EditText) promptView.findViewById(R.id.userInput);
+				final EditText input = (EditText) promptView.findViewById(R.id.userInputAddressTCP);
 
 				// setup a dialog window
 				alertDialogBuilder
@@ -73,20 +74,21 @@ public class MainActivity extends Activity {
 			}
 		});
 		
-		Button sendUDP = (Button) findViewById(R.id.bTestUDP);
+		ImageButton sendUDP = (ImageButton) findViewById(R.id.bTestUDP);
+		//Button sendUDP = (Button) findViewById(R.id.bTestUDP);
 		sendUDP.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				//diaglog show to get server address from user
 				LayoutInflater layoutInflater = LayoutInflater.from(context);
 
-				View promptView = layoutInflater.inflate(R.layout.prompt_get_tcp_address, null);
+				View promptView = layoutInflater.inflate(R.layout.promt_get_udp_configure, null);
 
 				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
 				alertDialogBuilder.setView(promptView);
 
-				final EditText input = (EditText) promptView.findViewById(R.id.userInput);
+				final EditText input = (EditText) promptView.findViewById(R.id.userInputAddressUDP);
 
 				// setup a dialog window
 				alertDialogBuilder

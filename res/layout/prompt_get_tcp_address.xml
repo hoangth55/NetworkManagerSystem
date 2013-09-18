@@ -1,26 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_root"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:padding="10dp" >
+   	android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
 
-    <TextView
+    <ImageView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tv_label"
+       	android:layout_width="match_parent"
+       	android:layout_height="match_parent"
+       	
+        android:scaleType="center"
+        android:src="@drawable/header_configure"
+      	android:contentDescription="@string/app_name"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+  
+    
     <EditText
-        android:id="@+id/userInput"
+        android:id="@+id/userInputAddressTCP"
+        android:inputType="textEmailAddress"
         android:layout_width="match_parent"
-        android:inputType="text"
-        android:layout_height="wrap_content" >
-
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:hint="@string/addressserver"> 
         <requestFocus />
-
     </EditText>
+    
 
 </LinearLayout>

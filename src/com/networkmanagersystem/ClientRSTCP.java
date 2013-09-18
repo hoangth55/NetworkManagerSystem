@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 public class ClientRSTCP extends Activity {
@@ -46,7 +47,7 @@ public class ClientRSTCP extends Activity {
 				android.R.layout.simple_list_item_1);
 		msgView.setAdapter(msgList);
 		
-		Button back = (Button) findViewById(R.id.TCPBack);
+		ImageButton back = (ImageButton) findViewById(R.id.TCPBack);
 		back.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -60,10 +61,9 @@ public class ClientRSTCP extends Activity {
 		if (extras != null) {
 			host = extras.getString("AddressServer");
 		}
-		
-		sendFile();
 		recieveFile();
-		
+		sendFile();
+
 	}
 
 	
@@ -73,7 +73,7 @@ public class ClientRSTCP extends Activity {
 			@Override
 			public void run() {
 				try {
-					Socket sock = new Socket(host, portSending);
+					Socket sockSend = new Socket(host, portSending);
 					//displayMsg("Connecting to sending...");
 
 					long start = System.currentTimeMillis();
@@ -83,12 +83,12 @@ public class ClientRSTCP extends Activity {
 					//FileInputStream fis = new FileInputStream(myFile);
 					//BufferedInputStream bis = new BufferedInputStream(fis);
 					//bis.read(mybytearray, 0, mybytearray.length);
-					OutputStream os = sock.getOutputStream();
+					OutputStream os = sockSend.getOutputStream();
 
 					os.write(mybytearray, 0, mybytearray.length);
 					os.flush();
 
-					sock.close();
+					sockSend.close();
 
 					long end = System.currentTimeMillis();
 					//displayMsg("Sending...");
@@ -98,12 +98,12 @@ public class ClientRSTCP extends Activity {
 					// You can re-check the size of your file
 					final long contentLength = mybytearray.length;
 					// Bandwidth : size(KB)/time(s)
-					float bandwidth = contentLength / ((end - start));
+					float bandwidth = contentLength / ((end - start))/1000*8;
 
 					displayMsg("File size was uploaded: " + contentLength/1024
 							+ "kb");
 					displayMsg("[BENCHMARK] Bandwidth uploading is:"
-							+ bandwidth + "kb/s");
+							+ bandwidth + "Mbps");
 
 				} catch (UnknownHostException e) {
 					e.printStackTrace();
@@ -169,12 +169,12 @@ public class ClientRSTCP extends Activity {
 					// You can re-check the size of your file
 					final long contentLength = current;
 					// Bandwidth : size(KB)/time(s)
-					float bandwidth = contentLength / ((end - start));
+					float bandwidth = contentLength/1000/(end - start)*8;
 
 					displayMsg("File size was downloaded: " + contentLength/1024
 							+ "kb");
 					displayMsg("[BENCHMARK] Bandwidth downloading is:"
-							+ bandwidth + "kb/s");
+							+ bandwidth + "Mbps");
 
 				} catch (UnknownHostException e) {
 					e.printStackTrace();

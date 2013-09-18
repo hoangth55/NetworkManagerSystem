@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 public class ClientReUDP extends Activity {
@@ -36,7 +37,7 @@ public class ClientReUDP extends Activity {
 				android.R.layout.simple_list_item_1);
 		msgView.setAdapter(msgList);
 		
-		Button back = (Button) findViewById(R.id.UDPBack);
+		ImageButton back = (ImageButton) findViewById(R.id.UDPBack);
 		back.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

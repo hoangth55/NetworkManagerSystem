@@ -18,31 +18,33 @@
             android:layout_margin="100dp"
             android:src="@drawable/logo" />
     </RelativeLayout>
-
+	
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.41" 
-        android:layout_margin="100dp">
-        
-        <Button
+        android:layout_height="wrap_content" >
+
+        <ImageButton
         android:id="@+id/bTestUDP"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/btn_test"
-        android:text="Testing UDP"
+        android:src="@drawable/button_udp"
+        android:layout_margin="100dp"
+        android:layout_centerHorizontal="true"
          />
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-    	<Button
-    	    android:id="@+id/bSend"
+            <ImageButton
+    	    android:id="@+id/bTestTCP"
     	    android:layout_width="wrap_content"
     	    android:layout_height="wrap_content"
-    	    android:layout_alignParentRight="true"
-    	    android:layout_alignParentTop="true"
-    	    android:src="@drawable/btn_test"
-    	    android:text="Testing bandwidth" />
-        
+    	    android:layout_margin="100dp"
+            android:layout_centerHorizontal="true"
+    	    android:src="@drawable/button_tcp"/>
     </RelativeLayout>
-
+   
 </LinearLayout>
 

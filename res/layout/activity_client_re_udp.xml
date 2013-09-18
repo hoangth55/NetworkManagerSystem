@@ -6,21 +6,36 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ClientReUDP" >
-
+    tools:context=".Testing Packet Loss" 
+    android:background="@drawable/background">
+	
+    
     <ListView
         android:id="@+id/listViewUDP"
         android:layout_width="fill_parent"
-        android:layout_height="350dp"
-        android:layout_margin="20dp" >
+        android:layout_height="450dp"
+        android:layout_marginBottom="220dp"
+        android:divider="#b5b5b5"
+      	android:dividerHeight="1dp"
+      	android:background="@color/black_overlay" >
     </ListView>
 
-    <Button
-        android:id="@+id/UDPBack"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/listViewUDP"
-        android:layout_below="@+id/listViewUDP"
-        android:text="Testing again" />
+        android:layout_marginTop="500dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" >
+
+        <ImageButton
+            android:id="@+id/UDPBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            
+            android:src="@drawable/button_again" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

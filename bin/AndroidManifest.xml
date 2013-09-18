@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="18" />
 
     <application
@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.networkmanagersystem.Tramsfer"
+            android:name="com.networkmanagersystem.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,9 +23,14 @@
             </intent-filter>
         </activity>
         
+         <activity
+            android:name="com.networkmanagersystem.ClientReUDP"
+            android:label="@string/title_activity_client_re_udp" >
+        </activity>
+        
         <activity
-            android:name="com.example.networkmanagersystem.ReceivefileActivity"
-            android:label="@string/title_activity_receivefile" >
+            android:name="com.networkmanagersystem.ClientRSTCP"
+            android:label="@string/title_activity_client_rstcp" >
         </activity>
     </application>
 
