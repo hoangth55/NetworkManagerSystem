@@ -7,21 +7,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.DecimalFormat;
 
 import com.example.networkmanagersystem.R;
-import com.example.networkmanagersystem.R.layout;
-import com.example.networkmanagersystem.R.menu;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -30,9 +25,6 @@ public class ClientRSTCP extends Activity {
 	static String host;
 	static int portSending = 27015;
 	static int portReceiving = 26999;
-
-	static int portUDPTesting = 2700;
-	static int totalPacketUDP = 1;
 
 	public ListView msgView;
 	public ArrayAdapter<String> msgList;
@@ -60,15 +52,14 @@ public class ClientRSTCP extends Activity {
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			host = extras.getString("AddressServer");
+			if (recieveFile())
+				sendFile();
 		}
-		recieveFile();
-		sendFile();
-
 	}
 
 	
 	
-	public void sendFile() {
+	public boolean sendFile() {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -79,7 +70,7 @@ public class ClientRSTCP extends Activity {
 					long start = System.currentTimeMillis();
 					// sendfile
 					//File myFile = new File(selectedFilePath);
-					byte[] mybytearray = new byte[5000000];
+					byte[] mybytearray = new byte[15000000];
 					//FileInputStream fis = new FileInputStream(myFile);
 					//BufferedInputStream bis = new BufferedInputStream(fis);
 					//bis.read(mybytearray, 0, mybytearray.length);
@@ -98,31 +89,30 @@ public class ClientRSTCP extends Activity {
 					// You can re-check the size of your file
 					final long contentLength = mybytearray.length;
 					// Bandwidth : size(KB)/time(s)
-					float bandwidth = contentLength / ((end - start))/1000*8;
-
+					double bandwidth = contentLength/ (end - start)*8;
+					DecimalFormat dcf = new DecimalFormat("#.00");
+					
 					displayMsg("File size was uploaded: " + contentLength/1024
 							+ "kb");
-					displayMsg("[BENCHMARK] Bandwidth uploading is:"
-							+ bandwidth + "Mbps");
-
+					displayMsg("[BENCHMARK] Bandwidth uploading is: "
+							+ dcf.format(bandwidth/1024) + "Mbps");
+					
 				} catch (UnknownHostException e) {
 					e.printStackTrace();
-					Log.d("", "hello222");
 				} catch (IOException e) {
 					e.printStackTrace();
-					Log.d("", "hello4333");
 				}
-
 			}
 		}).start();
+		return true;
 	}
 
-	public void recieveFile() {
+	public boolean recieveFile() {
 
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				int filesize = 6022386; // filesize temporary hardcoded
+				int filesize = 16022386; 
 
 				int bytesRead;
 				int current = 0;
@@ -149,7 +139,6 @@ public class ClientRSTCP extends Activity {
 					bytesRead = is.read(mybytearray, 0, mybytearray.length);
 					current = bytesRead;
 
-					// thanks to A. Cádiz for the bug fix
 					do {
 						bytesRead = is.read(mybytearray, current,
 								(mybytearray.length - current));
@@ -169,37 +158,32 @@ public class ClientRSTCP extends Activity {
 					// You can re-check the size of your file
 					final long contentLength = current;
 					// Bandwidth : size(KB)/time(s)
-					float bandwidth = contentLength/1000/(end - start)*8;
-
+					double bandwidth = contentLength/(end - start)*8;
+					DecimalFormat dcf = new DecimalFormat("#.00");
+					
 					displayMsg("File size was downloaded: " + contentLength/1024
 							+ "kb");
 					displayMsg("[BENCHMARK] Bandwidth downloading is:"
-							+ bandwidth + "Mbps");
+							+ dcf.format(bandwidth/1024) + " Mbps");
 
 				} catch (UnknownHostException e) {
 					e.printStackTrace();
-					Log.d("", "hello222");
 				} catch (IOException e) {
 					e.printStackTrace();
-					Log.d("", "hello4333");
 				}
 
 			}
 		}).start();
+		return true;
 	}
 	
 	public void displayMsg(String msg) {
 		final String mssg = msg;
-
 		handler.post(new Runnable() {
-
-			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				msgList.add(mssg);
 				msgView.setAdapter(msgList);
 				msgView.smoothScrollToPosition(msgList.getCount() - 1);
-				//Log.d("", "hi");
 			}
 		});
 

@@ -59,7 +59,7 @@ public class MainServer {
 			tcpserverToReceive.register(selector, SelectionKey.OP_ACCEPT);
 			udpserver.register(selector, SelectionKey.OP_READ);
 
-			ByteBuffer receiveBuffer = ByteBuffer.allocate(0);
+			ByteBuffer receiveBuffer = ByteBuffer.allocate(10);
 
 			for (;;) {
 				try { 
@@ -75,7 +75,8 @@ public class MainServer {
 
 						// Get the channel associated with the key
 						Channel c = (Channel) key.channel();
-
+						
+						//Send to client to test download
 						if (key.isAcceptable() && c == tcpserverToSend) {
 
 							SocketChannel client = tcpserverToSend.accept();
@@ -91,7 +92,7 @@ public class MainServer {
 
 								//String destPathFileToSend = "C:\\Users\\Adventure\\Documents\\workspace\\NetworkManagerSystem\\src\\com\\example\\networkmanagersystem\\HHH.jpg"; // destination
 								//File myFile = new File(destPathFileToSend);
-								byte[] newbytearray = new byte[5000000];
+								byte[] newbytearray = new byte[15000000];
 								OutputStream os = sockSend.getOutputStream();
 								// System.out.println("Sending to client...");
 								os.write(newbytearray, 0, newbytearray.length);
@@ -110,14 +111,14 @@ public class MainServer {
 
 								System.out.println("File size was downloaded: "
 										+ contentLength2 + "bytes");
-								// System.out.println(
-								// "[BENCHMARK] Bandwidth downloading is:" +
-								// bandwidth2 + "kb/s");
+								System.out.println(
+								 "[BENCHMARK] Bandwidth downloading is:" +
+								 bandwidth2 + "kb/s");
 
 								sockSend.close();
 								client.close(); // close connection
 							}
-						// ------------------------receive file-----------	
+						// Receive from client to test upload
 						} else if (key.isAcceptable() && c == tcpserverToReceive){
 							SocketChannel client = tcpserverToReceive.accept();
 							int filesize = 80022386; 
@@ -133,7 +134,7 @@ public class MainServer {
 								long start = System.currentTimeMillis();
 								byte[] mybytearray = new byte[filesize];
 								InputStream is = sock.getInputStream();
-								destPathFile = "C:\\Users\\Adventure\\Documents\\workspace\\NetworkManagerSystem\\src\\com\\example\\networkmanagersystem\\Test.jpg"; // destination
+								destPathFile = "C:\\Users\\Adventure\\Documents\\workspace\\NetworkManagerSystem\\src\\com\\example\\networkmanagersystem\\Test"; // destination
 								FileOutputStream fos = new FileOutputStream(destPathFile);
 	
 								BufferedOutputStream bos = new BufferedOutputStream(fos);
@@ -160,27 +161,29 @@ public class MainServer {
 	
 								System.out.println("File size was uploaded: " + contentLength
 										+ "bytes");
-								// System.out.println( "[BENCHMARK] Bandwidth uploading is:" +
-								// bandwidth + "kb/s");
+								System.out.println( "[BENCHMARK] Bandwidth uploading is:" +
+								 bandwidth + "kb/s");
 								sock.close();
 								bos.close();
 								
 								client.close(); // close connection
 							}
+						// Test UDP packet loss
 						} else if (key.isReadable() && c == udpserver) {
 							InetSocketAddress clientAddress = (InetSocketAddress) udpserver
 									.receive(receiveBuffer);
 							// DatagramSocket socket = udpserver.socket();
 							try {
-								
+								byte[] buf = new byte[100];
+				                
+								//System.out.println("Receive from android client:" + receiveBuffer.get(buf).toString());
 								System.out.println("Listening...");
 
 								if (clientAddress != null) {
 									int count = 0;									
-
+									
 									// Sending response
-									byte[] message = ("Hello Android")
-											.getBytes();
+									byte[] message = ("Hello Android").getBytes();
 									DatagramPacket response = new DatagramPacket(
 											message, message.length, clientAddress.getAddress(), CLIENT_PORT_ToReceiveUDP);
 										

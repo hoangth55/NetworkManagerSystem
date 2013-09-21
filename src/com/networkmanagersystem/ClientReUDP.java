@@ -5,18 +5,14 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 import com.example.networkmanagersystem.R;
-import com.example.networkmanagersystem.R.layout;
-import com.example.networkmanagersystem.R.menu;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -96,7 +92,6 @@ public class ClientReUDP extends Activity {
 
 		new Thread(new Runnable() {
 			private final static int SERVER_PORT = 10001;
-
 			@Override
 			public void run() {
 				try {
@@ -122,25 +117,15 @@ public class ClientReUDP extends Activity {
 		}).start();
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.client_re_ud, menu);
-		return true;
-	}
 	
 	public void displayMsg(String msg) {
 		final String mssg = msg;
-
 		handler.post(new Runnable() {
-
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				msgList.add(mssg);
 				msgView.setAdapter(msgList);
 				msgView.smoothScrollToPosition(msgList.getCount() - 1);
-				//Log.d("", "hi");
 			}
 		});
 
