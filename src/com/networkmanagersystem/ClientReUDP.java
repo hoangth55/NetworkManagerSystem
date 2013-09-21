@@ -61,11 +61,11 @@ public class ClientReUDP extends Activity {
 					DatagramSocket socket = new DatagramSocket(CLIENT_PORT_ToReceiveUDP);
 					//socket.setBroadcast(true);
 					socket.setReuseAddress(true);
-					socket.setSoTimeout(1000);
+					socket.setSoTimeout(2000);
 					
 					byte[] buf = new byte[1024];
 					DatagramPacket packet = new DatagramPacket(buf, buf.length);
-					for (int i = 0; i <= 10000; i++) {
+					for (int i = 0; i <= 100000; i++) {
 						// Listening on socket
 						// Log.d("UDP Receiver", "Listening...");
 						socket.receive(packet);
