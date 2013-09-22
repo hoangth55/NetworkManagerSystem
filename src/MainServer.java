@@ -25,7 +25,7 @@ public class MainServer {
 	public static void main(String args[]) throws IOException {
 		try {
 			int portToSend = 26999; 
-			int totalPacketUDP = 10000;
+			int totalPacketUDP = 1000;
 			int CLIENT_PORT_ToReceiveUDP = 10001;
 			int portToReceiver = 27015;
 
@@ -134,10 +134,10 @@ public class MainServer {
 								long start = System.currentTimeMillis();
 								byte[] mybytearray = new byte[filesize];
 								InputStream is = sock.getInputStream();
-								destPathFile = "C:\\Users\\Adventure\\Documents\\workspace\\NetworkManagerSystem\\src\\com\\example\\networkmanagersystem\\Test"; // destination
-								FileOutputStream fos = new FileOutputStream(destPathFile);
+								//destPathFile = "C:\\Users\\Adventure\\Documents\\workspace\\NetworkManagerSystem\\src\\com\\example\\networkmanagersystem\\Test"; // destination
+								//FileOutputStream fos = new FileOutputStream(destPathFile);
 	
-								BufferedOutputStream bos = new BufferedOutputStream(fos);
+								//BufferedOutputStream bos = new BufferedOutputStream(fos);
 								bytesRead = is.read(mybytearray, 0, mybytearray.length);
 								current = bytesRead;
 	
@@ -148,8 +148,8 @@ public class MainServer {
 										current += bytesRead;
 								} while (bytesRead > -1);
 	
-								bos.write(mybytearray, 0, current);
-								bos.flush();
+								//bos.write(mybytearray, 0, current);
+								//bos.flush();
 								long end = System.currentTimeMillis();
 	
 								System.out.println(end - start + "ms");
@@ -164,7 +164,7 @@ public class MainServer {
 								System.out.println( "[BENCHMARK] Bandwidth uploading is:" +
 								 bandwidth + "kb/s");
 								sock.close();
-								bos.close();
+								//bos.close();
 								
 								client.close(); // close connection
 							}
@@ -183,19 +183,37 @@ public class MainServer {
 									int count = 0;									
 									
 									// Sending response
-									byte[] message = ("Hello Android").getBytes();
+									byte[] message = new byte[15000];
 									DatagramPacket response = new DatagramPacket(
 											message, message.length, clientAddress.getAddress(), CLIENT_PORT_ToReceiveUDP);
 										
 									DatagramSocket clientSocket = new DatagramSocket();
-									System.out.println("Sending: '"
-											+ new String(message) + "'");
-
-									for (int x1 = 0; x1 < totalPacketUDP; x1++) {
-										count++;
-										clientSocket.send(response);
-										Thread.sleep(9/9);
+									
+									long start = System.currentTimeMillis();
+									long end;
+									//Send with the bandwidth is 3 Mbps =>> time = size/3Mb
+									for (int x1 = 0; x1 < 1000; x1++) {
+										for (int k = 0; k < 10; k++){
+											count++;
+											clientSocket.send(response);	
+											Thread.sleep(1);
+										}
+										end = System.currentTimeMillis();
+										
+										long time_band = message.length*count*8/(24*1024*1024); 
+										long tmp = time_band*1000 - (end-start);
+										
+										if (tmp > 0){
+											//System.out.println("Sleep: " + tmp);
+											//Thread.sleep(tmp);
+										}
+										
 									}
+									/*for (int x1 = 0; x1 < 10000; x1++) {
+										count++;
+										clientSocket.send(response);	
+										Thread.sleep(1);
+									}*/
 
 									System.out.println("Response sent " + count
 											+ "packets!");

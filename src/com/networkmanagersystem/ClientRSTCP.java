@@ -85,7 +85,7 @@ public class ClientRSTCP extends Activity {
 
 				// sendfile
 				// File myFile = new File(selectedFilePath);
-				byte[] mybytearray = new byte[15000000];
+				byte[] mybytearray = new byte[20000000];
 				// FileInputStream fis = new FileInputStream(myFile);
 				// BufferedInputStream bis = new BufferedInputStream(fis);
 				// bis.read(mybytearray, 0, mybytearray.length);
@@ -93,14 +93,13 @@ public class ClientRSTCP extends Activity {
 
 				os.write(mybytearray, 0, mybytearray.length);
 				os.flush();
-
+				sockSend.close();
+				
 				long end = System.currentTimeMillis();
 
-				sockSend.close();
-
 				// displayMsg("Sending...");
-				displayMsg("Time at starting upload: " + startSend);
-				displayMsg("Time at finishing upload: " + end);
+				//displayMsg("Time at starting upload: " + startSend);
+				//displayMsg("Time at finishing upload: " + end);
 				displayMsg("Time to uploading is:" + (end - startSend) + "ms");
 
 				// You can re-check the size of your file
@@ -138,7 +137,7 @@ public class ClientRSTCP extends Activity {
 				byte[] mybytearray = new byte[filesize];
 
 				InputStream is = sock.getInputStream();
-				long startReceive = System.currentTimeMillis();
+				
 				// File file = new
 				// File(Environment.getExternalStorageDirectory() +
 				// File.separator + "Test.jpg");
@@ -149,7 +148,7 @@ public class ClientRSTCP extends Activity {
 				//BufferedOutputStream bos = new BufferedOutputStream(fos);
 				bytesRead = is.read(mybytearray, 0, mybytearray.length);
 				current = bytesRead;
-
+				long startReceive = System.currentTimeMillis();
 				do {
 					bytesRead = is.read(mybytearray, current,
 							(mybytearray.length - current));
@@ -164,8 +163,8 @@ public class ClientRSTCP extends Activity {
 				long end1 = System.currentTimeMillis();
 
 				// displayMsg("Receiving....");
-				displayMsg("Time at starting download: " + startReceive);
-				displayMsg("Time at finishing download: " + end1);
+				//displayMsg("Time at starting download: " + startReceive);
+				//displayMsg("Time at finishing download: " + end1);
 				displayMsg("Time to downloading is:" + (end1 - startReceive)
 						+ "ms");
 
